@@ -3,12 +3,12 @@ version: "3.9"
 services:
   db:
     image: postgres:15
-    container_name: my_postgres
+    container_name: global
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: database_global
     ports:
       - "5433:5432" # local:contendor
     volumes:

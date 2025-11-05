@@ -3,11 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './auth/entities/auth.entity';
 import { Program } from './program/entities/program.entity';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -21,5 +21,6 @@ import { Program } from './program/entities/program.entity';
 
     TypeOrmModule.forFeature([Program, User]),
   ],
+  controllers:[AppController]
 })
 export class AppModule {}

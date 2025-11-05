@@ -1,12 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { DataSource } from 'typeorm';
 
-@Controller()
+@Controller('health')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly dataSource: DataSource) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async check() {
+    try {
+      await this.dataSource.query('SELECT 1');
+      return { status: 'OK ✅ Conectado a la base de datos' };
+    } catch (err) {
+      return { status: 'ERROR ❌', message: err.message };
+    }
   }
 }
