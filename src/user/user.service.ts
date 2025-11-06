@@ -42,8 +42,24 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async findAll(page: number = 1) {
+    const take = 10;
+    const skip = (page - 1) * take;
+
+    const [items, total] = await this.userRepo.findAndCount({
+      relations: ['program'],
+      take,
+      skip,
+      order: { id: 'DESC' },
+    });
+
+    return {
+      success: true,
+      total,
+      page,
+      totalPages: Math.ceil(total / take),
+      items,
+    };
   }
 
   findOne(id: number) {
