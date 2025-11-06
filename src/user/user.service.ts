@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateAuthDto } from './dto/update-user.dto';
-import { User } from './entities/auth.entity';
+import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Program } from 'src/program/entities/program.entity';
@@ -10,7 +10,7 @@ import { ConflictError } from 'src/common/errors/conflict.error';
 import { NotFoundError } from 'src/common/errors/not-found.error';
 
 @Injectable()
-export class AuthService {
+export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
 
