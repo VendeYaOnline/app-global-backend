@@ -62,15 +62,7 @@ export class UserService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async findByEmail(email: string) {
+    return this.userRepo.findOne({ where: { email } });
   }
 }
