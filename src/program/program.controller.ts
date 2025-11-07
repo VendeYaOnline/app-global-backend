@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProgramService } from './program.service';
 import { CreateProgramDto } from './dto/create-program.dto';
@@ -28,8 +29,8 @@ export class ProgramController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll() {
-    return this.programService.findAll();
+  findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    return this.programService.findAll(Number(page), Number(limit));
   }
 
   @Patch(':id')

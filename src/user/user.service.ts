@@ -39,8 +39,8 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  async findAll(page: number = 1) {
-    const take = 10;
+  async findAll(page: number = 1, limit: number = 10) {
+    const take = limit;
     const skip = (page - 1) * take;
 
     const [items, total] = await this.userRepo.findAndCount({
