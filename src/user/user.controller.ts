@@ -6,12 +6,15 @@ import {
   UseGuards,
   Query,
   Param,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/role.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -28,6 +31,16 @@ export class UserController {
   @UseGuards(AuthGuard)
   findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
     return this.userService.findAll(Number(page), Number(limit));
+  }
+
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() data: UpdateUserDto) {
+    return this.userService.update(id, data);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: string) {
+    return this.userService.delete(id);
   }
 
   @Post(':userId/programs/:programId')

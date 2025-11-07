@@ -7,6 +7,7 @@ import { Program } from 'src/program/entities/program.entity';
 import { BcryptUtil } from 'src/common/utils/bcrypt.util';
 import { ConflictError } from 'src/common/errors/conflict.error';
 import { NotFoundError } from 'src/common/errors/not-found.error';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -58,6 +59,36 @@ export class UserService {
         lastPage: Math.ceil(total / limit),
       },
     };
+  }
+
+  async update(id: string, data: UpdateUserDto) {
+    const user = await this.userRepo.findOne({
+      where: { id },
+      relations: ['programs'],
+    });
+
+    if (!user) throw new NotFoundError('Usuario no encontrado');
+
+    if (data.programIds) {
+      const programs = await this.programRepo.findBy({
+        id: In(data.programIds),
+      });
+
+      user.programs = programs;
+    }
+
+    if (data.fullName) user.fullName = data.fullName;
+    if (data.email) user.email = data.email;
+    if (data.role) user.role = data.role;
+
+    return this.userRepo.save(user);
+  }
+
+  async delete(id: string) {
+    const result = await this.userRepo.delete(id);
+    if (result.affected === 0) throw new NotFoundError('Usuario no encontrado');
+
+    return { message: 'Usuario eliminado correctamente' };
   }
 
   async addProgramToUser(userId: string, programId: string) {
