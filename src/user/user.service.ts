@@ -60,7 +60,7 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return this.userRepo.findOne({ where: { email } });
+    return this.userRepo.findOne({ where: { email }, relations: ['programs'] });
   }
 
   async findByIds(ids: string[]): Promise<Program[]> {

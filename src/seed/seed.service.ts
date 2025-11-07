@@ -28,41 +28,41 @@ export class SeedService {
         description:
           'Aprende a crear aplicaciones web modernas con React, Node.js y MongoDB',
         startDate: new Date(),
-        status: 'active',
+        status: 'easy',
       },
       {
         name: 'Data Science con Python',
         description:
           'Domina el análisis de datos y machine learning con Python',
         startDate: new Date(),
-        status: 'pending',
+        status: 'mid',
       },
       {
         name: 'Diseño UX/UI',
         description: 'Crea experiencias digitales excepcionales',
         startDate: new Date(),
-        status: 'pending',
+        status: 'easy',
       },
       {
         name: 'Marketing Digital',
         description: 'Estrategias de marketing en la era digital',
         startDate: new Date(),
-        status: 'pending',
+        status: 'mid',
       },
       {
         name: 'DevOps y Cloud Computing',
         description: 'Infraestructura moderna y despliegue continuo',
         startDate: new Date(),
-        status: 'pending',
+        status: 'high',
       },
       {
         name: 'Inteligencia Artificial',
         description: 'Fundamentos y aplicaciones de IA moderna',
         startDate: new Date(),
-        status: 'pending',
+        status: 'high',
       },
     ]);
-    const password = await bcrypt.hash('123456', 10);
+    const password = await bcrypt.hash('12345678', 10);
 
     await this.userRepo.save([
       {
@@ -74,7 +74,7 @@ export class SeedService {
       },
       {
         fullName: 'Andres Prueba',
-        email: 'andres@example.com',
+        email: 'estudiante@lms.com',
         password,
         role: UserRole.STUDENT,
         programs: [programs[1]],
