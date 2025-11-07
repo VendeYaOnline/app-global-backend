@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -20,5 +28,14 @@ export class UserController {
   @UseGuards(AuthGuard)
   findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
     return this.userService.findAll(Number(page), Number(limit));
+  }
+
+  @Post(':userId/programs/:programId')
+  @UseGuards(AuthGuard)
+  addProgram(
+    @Param('userId') userId: string,
+    @Param('programId') programId: string,
+  ) {
+    return this.userService.addProgramToUser(userId, programId);
   }
 }

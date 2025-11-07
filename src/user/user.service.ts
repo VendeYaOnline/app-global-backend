@@ -59,6 +59,31 @@ export class UserService {
     };
   }
 
+  async addProgramToUser(userId: string, programId: string) {
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
+      relations: ['programs'],
+    });
+
+    if (!user) throw new NotFoundError('El usuario no existe.');
+
+    const program = await this.programRepo.findOne({
+      where: { id: programId },
+    });
+
+    if (!program) throw new NotFoundError('El programa no existe.');
+
+    // ? ⛔ Evitar duplicados
+    const alreadyAssigned = user.programs.some((p) => p.id === program.id);
+    if (alreadyAssigned)
+      throw new ConflictError('El usuario ya está inscrito en este programa.');
+
+    // ? ✅ Agregar a la lista de programas del usuario
+    user.programs.push(program);
+
+    return this.userRepo.save(user);
+  }
+
   async findByEmail(email: string) {
     return this.userRepo.findOne({ where: { email }, relations: ['programs'] });
   }
