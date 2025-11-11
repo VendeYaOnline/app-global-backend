@@ -8,14 +8,22 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
 
-    const token = req.cookies?.access_token;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      throw new UnauthorizedException('No se proporcionó el header Authorization');
+    }
+
+    // authHeader → "Bearer eyJhbGciOi..."
+    const token = authHeader.split(' ')[1];
+
     if (!token) {
-      throw new UnauthorizedException('No se proporciona ningún token');
+      throw new UnauthorizedException('Formato de Authorization inválido');
     }
 
     try {
@@ -23,10 +31,10 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
 
-      req.user = payload;
+      req.user = payload; // dejamos user disponible para controladores
       return true;
-    } catch (error) {
-      throw new UnauthorizedException('Token no válido o caducado');
+    } catch {
+      throw new UnauthorizedException('Token inválido o expirado');
     }
   }
 }

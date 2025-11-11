@@ -1,10 +1,10 @@
-import { Optional } from '@nestjs/common';
 import {
   IsString,
   IsNotEmpty,
   MaxLength,
   IsDateString,
   IsIn,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateProgramDto {
@@ -32,7 +32,6 @@ export class CreateProgramDto {
   })
   difficulty?: string;
 
-  @IsNotEmpty({ message: 'La estado del programa no puede estar vacía.' })
-  @IsString({ message: 'La estado debe ser una cadena de texto.' })
+  @IsOptional()
   status: string;
 }

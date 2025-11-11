@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { Response } from 'express';
 import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
@@ -17,29 +16,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(
-    @Body() createAuthDto: CreateAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async login(@Body() createAuthDto: CreateAuthDto) {
     const { token, user } = await this.authService.login(createAuthDto);
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      path: '/',
-    });
-
-    return user;
+    return { user, token };
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    });
-
+  async logout() {
     return { message: 'Logout exitoso' };
   }
 
