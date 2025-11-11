@@ -26,7 +26,6 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      domain: 'https://prueba-frontend-global.vercel.app',
       path: '/',
       maxAge: 9 * 60 * 60 * 1000,
     });
